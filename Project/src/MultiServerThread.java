@@ -19,13 +19,12 @@ public class MultiServerThread extends Thread {
         ) {
             String inputLine, outputLine;
             ServerProtocol sp = new ServerProtocol();
-            outputLine = sp.processInput(null);
-            out.println(outputLine);
+            System.out.println("Server launched.");
 
             while ((inputLine = in.readLine()) != null) {
                 outputLine = sp.processInput(inputLine);
                 out.println(outputLine);
-                if (outputLine.equals("Bye"))
+                if (outputLine.equals("Fatal error"))
                     break;
             }
             socket.close();
