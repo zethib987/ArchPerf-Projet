@@ -18,7 +18,6 @@ public class ServerProtocol {
                 data[i] = line;
                 i++;
             }
-            this.foo = 0;
         } catch(Exception e) {
             System.out.println(e);
         }

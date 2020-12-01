@@ -18,12 +18,12 @@ public class MultiServerThread extends Thread{
                                 socket.getInputStream()));
         ) {
             String inputLine, outputLine;
-            outputLine = "Hello there";
+            outputLine = "Connected to server";
             out.println(outputLine);
 
             while ((inputLine = in.readLine()) != null) {
-                System.out.println("Client:"+inputLine);
-                out.println(Server.search(inputLine));
+                System.out.println("Request: " + inputLine);
+                out.println(Server.raw_search(inputLine));
             }
             socket.close();
         } catch (IOException e) {
