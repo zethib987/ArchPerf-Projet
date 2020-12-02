@@ -4,8 +4,9 @@ import java.io.*;
 public class Client {
 
     public static void main(String []args){
+        System.out.println(args[0]);
 
-        String hostName = "localhost";
+        String hostName ="localhost";
         int portNumber = 4444;
 
         System.out.println("Launching client");

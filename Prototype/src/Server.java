@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class Server {
 
-    static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\dbdata.txt";
+    static String FILEPATH = "C:\\Users\\Thib\\Documents\\unif\\2020-2021\\Q1\\Architecture and Perf\\projet\\Prototype\\src\\input.txt";
     static int portNumber = 4444;
 
     static String [] types;
@@ -88,10 +88,9 @@ public class Server {
     public static String raw_search(String request) {
 
         String[] split_request = request.split(";",2);
-
         if (split_request.length == 2) {
             String[] request_types;
-            if (split_request[0].length() != 0){
+            if (split_request[0].length() != 0) {
                 request_types = split_request[0].split(",");
             } else { // If no <types> specified then all
                 request_types = new String[] {"0", "1", "2", "3", "4", "5"};
@@ -99,7 +98,6 @@ public class Server {
             String regex = split_request[1];
 
             StringBuffer sb = new StringBuffer();
-
             for (int i = 0; i < types.length; i++) {
                 for (String request_type: request_types) {
                     if (types[i].equals(request_type) && sentences[i].matches(regex)) {
