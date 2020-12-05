@@ -1,40 +1,37 @@
 import java.util.concurrent.Semaphore;
 
-public class MultiSearch extends Thread{
+public class MultiSearchSmart extends Thread{
 
 
     private int start,end;
     private String regex;
-    private String [] request_types;
+    static String[] request_types= {"0", "1", "2", "3", "4", "5"};
 
     static int NUMBERSEM= 1;
     static Semaphore semaphore = new Semaphore(NUMBERSEM);
 
-    public MultiSearch(){
+    public MultiSearchSmart(){
         super("MultiSearch");
     }
-    public MultiSearch(String [] request_types, String regex, int start, int end){
+    public MultiSearchSmart( String regex, int start, int end){
         super("MultiSearch");
         this.start=start;
         this.end=end;
         this.regex=regex;
-        this.request_types=request_types;
     }
     public void run(){
         //long start = System.currentTimeMillis();
         searchThread();
         //long stop = System.currentTimeMillis();
-        //System.out.println("timer3:"+(stop-start));
+       // System.out.println("timer4:"+(stop-start));
     }
 
     public void searchThread() {
         StringBuffer sb = new StringBuffer();
         for (int i = start; i <= end; i++) {
-            for (String request_type : request_types) {
-                if (SmartServer.data[0][i].equals(request_type) && SmartServer.data[1][i].matches(regex)) {
+                if (SmartServer.data[1][i].matches(regex)) {
                     sb.append("|" + i + ": " + SmartServer.data[1][i] + "|");
                 }
-            }
         }
         try {
             semaphore.acquire();
