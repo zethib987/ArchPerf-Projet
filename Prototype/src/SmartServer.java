@@ -14,6 +14,9 @@ public class SmartServer {
     static String [] types;
     static String [] sentences;
     static String data [][];
+    static int NLINES=0;
+    static String output="";
+
 
 
     static String request1 = "1,3;the(.*)";
@@ -29,14 +32,13 @@ public class SmartServer {
         System.out.println("Loading database");
 
         try{ // Load database
-            raw_dbLoad(FILEPATH);
             smart_dbLoad(FILEPATH);
         } catch (Exception e){ // Handle exception
             System.out.println(e);
         }
         System.out.println("Database loaded");
         System.out.println("Server is ready");
-        Test(10);
+        Test(100);
 
        /* boolean listening = true;
         // Launch a multi server thread for each client
@@ -69,12 +71,12 @@ public class SmartServer {
             finish = System.currentTimeMillis();
             timeElapsed = finish - start;
             res[0]+=timeElapsed;
-            System.out.println("timer 1 :"+timeElapsed);
+           // System.out.println("timer 1 :"+timeElapsed);
         }
         res[0]/=nTest;
-        System.out.println("");
+       /* System.out.println("");
         System.out.println("-----------------------------------");
-        System.out.println("");
+        System.out.println("");*/
 
         try {
             Thread.sleep(5);
@@ -87,19 +89,19 @@ public class SmartServer {
         for(int i=0;i<nTest;i++) {
             try { // Load database
                 start =System.currentTimeMillis();
-                raw_search(request3);
+                smartOld_search(request3);
             } catch (Exception e) { // Handle exception
                 System.out.println(e);
             }
             finish = System.currentTimeMillis();
             timeElapsed = finish - start;
             res[1]+=timeElapsed;
-            System.out.println("timer 2 :"+timeElapsed);
+            //System.out.println("timer 2 :"+timeElapsed);
         }
         res[1]/=nTest;
-        System.out.println("");
+       /* System.out.println("");
         System.out.println("-----------------------------------");
-        System.out.println("");
+        System.out.println("");*/
 
         System.out.println("meanTime 1:"+ res[0]);
         System.out.println("meanTime 2:"+ res[1]);
@@ -135,6 +137,7 @@ public class SmartServer {
     public static void smart_dbLoad(String fileName) throws IOException {
         BufferedReader br;
         int nLines = howManyLines(fileName);
+        NLINES = nLines;
         data = new String[2][nLines];
 
         try{
@@ -156,8 +159,7 @@ public class SmartServer {
     }
     
 
-    public static String smart_search(String request) {
-
+    public static String smart_search(String request) throws InterruptedException {
         String[] split_request = request.split(";",2);
         if (split_request.length == 2) {
             String [] request_types;
@@ -168,10 +170,55 @@ public class SmartServer {
             }
             String regex = split_request[1];
 
+            Thread t1 = new   MultiSearch(request_types,regex,0, NLINES/3);
+            Thread t2 = new MultiSearch(request_types,regex,(NLINES/3) + 1, (NLINES/3)*2);
+            Thread t3 = new MultiSearch(request_types,regex,(NLINES/3)*2 + 1, NLINES-1);
+            t1.start();
+            t2.start();
+            t3.start();
+            t1.join();
+            t2.join();
+            t3.join();
+
+
+
+            if (output.length() == 0)
+                return "No match found";
+            else
+                return output;
+        } else {
+            return "Usage: <types>;<regex>";
+        }
+
+    }
+
+    /*public static void searchThread(String request_types[], String regex, int start, int end) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < data[0].length; i++) {
+            for (String request_type : request_types) {
+                if (data[0][i] == request_type && data[1][i].matches(regex)) {
+                    sb.append("|" + i + ": " + data[1][i] + "|");
+                }
+            }
+        }
+    }*/
+
+
+    public static String smartOld_search(String request) {
+        String[] split_request = request.split(";",2);
+        if (split_request.length == 2) {
+            String [] request_types;
+            if (split_request[0].length() != 0) {
+                request_types = split_request[0].split(",");
+            } else { // If no <types> specified then all
+                request_types = new String[] {"0", "1", "2", "3", "4", "5"};
+            }
+            String regex = split_request[1];
             StringBuffer sb = new StringBuffer();
+
             for (int i = 0; i < data[0].length; i++) {
-                for (String request_type: request_types) {
-                    if (data[0][i]==request_type && data[1][i].matches(regex)) {
+                for (String request_type : request_types) {
+                    if (data[0][i] == request_type && data[1][i].matches(regex)) {
                         sb.append("|" + i + ": " + data[1][i] + "|");
                     }
                 }
@@ -187,68 +234,5 @@ public class SmartServer {
         }
 
     }
-
-    /******************  RAW  ******************/
-
-
-    public static void raw_dbLoad(String fileName) throws IOException {
-        BufferedReader br;
-        int nLines = howManyLines(fileName);
-        types = new String[nLines];
-        sentences = new String[nLines];
-
-        try{
-            br = new BufferedReader(new FileReader(fileName));
-            String line;
-            String[] line_split;
-            for (int i = 0; i < nLines; i++) {
-                line = br.readLine();
-                line_split = line.split("@@@", 2);
-                types[i] = line_split[0];
-                sentences[i] = line_split[1];
-            }
-            br.close();
-        } catch(Exception e) { // Error while reading database
-            System.err.println("Error while reading database: " + e);
-            System.exit(-1);
-        }
-
-    }
-
-    public static String raw_search(String request) {
-
-        String[] split_request = request.split(";",2);
-        if (split_request.length == 2) {
-            String [] request_types;
-            if (split_request[0].length() != 0) {
-                request_types = split_request[0].split(",");
-            } else { // If no <types> specified then all
-                request_types = new String[] {"0", "1", "2", "3", "4", "5"};
-            }
-            String regex = split_request[1];
-
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < types.length; i++) {
-                for (String request_type: request_types) {
-                    if (types[i].equals(request_type) && sentences[i].matches(regex)) {
-                        sb.append("|" + i + ": " + sentences[i] + "|");
-                    }
-                }
-            }
-
-            String output = sb.toString();
-            if (output.length() == 0)
-                return "No match found";
-            else
-                return output;
-        }
-        else {
-            return "Usage: <types>;<regex>";
-        }
-    }
-
-
-
 }
-
 
