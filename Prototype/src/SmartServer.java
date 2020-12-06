@@ -13,13 +13,15 @@ public class SmartServer {
     static String output="";
     static String test[][];
     static Integer indexes[];
+    static int NTPT=3; // number of threads per type
+    static int NTHREADS=6; // number of threads for the smart3 search
 
-    static Thread threads[]=new Thread[6];
+    static Thread threads[];
 
     static String request1 = "1,3;the(.*)";
     static String request2 = "0,4;civ(.*)";
     static String request3 = ";FER(.*)";
-    static String request4 = ";why(.*)";
+    static String request4 = "1;why(.*)";
     //String [] requests = {request1,request2,request3,request4};
 
 
@@ -35,18 +37,17 @@ public class SmartServer {
             System.out.println(e);
         }
         System.out.println("Database loaded");
-       // System.out.println(NLINES);
-        long start = System.currentTimeMillis();
+        System.out.println(NLINES);
+
         QuickSort.quickSort();
-        long end = System.currentTimeMillis();
-        long res = end-start;
         indexes=startIndexes();
+        for(int i=0;i<indexes.length;i++) System.out.println(indexes[i]);
         System.out.println("Server is ready");
 
 
 
         // displayDb(data);
-        Test(10);
+        Test(100);
 
        /* boolean listening = true;
         // Launch a multi server thread for each client
@@ -79,12 +80,10 @@ public class SmartServer {
             finish = System.currentTimeMillis();
             timeElapsed = finish - start;
             res[0]+=timeElapsed;
-           // System.out.println("timer 1 :"+timeElapsed);
+
         }
         res[0]/=nTest;
-       /* System.out.println("");
-        System.out.println("-----------------------------------");
-        System.out.println("");*/
+
 
         try {
             Thread.sleep(5);
@@ -104,12 +103,9 @@ public class SmartServer {
             finish = System.currentTimeMillis();
             timeElapsed = finish - start;
             res[1]+=timeElapsed;
-            //System.out.println("timer 2 :"+timeElapsed);
+
         }
         res[1]/=nTest;
-       /* System.out.println("");
-        System.out.println("-----------------------------------");
-        System.out.println("");*/
 
         System.out.println("meanTime 1:"+ res[0]);
         System.out.println("meanTime 2:"+ res[1]);
@@ -118,41 +114,67 @@ public class SmartServer {
 
     }
 
+    // assuming that the indexes are consecutive numbers that start from 0 to n-1 (with n= number of threads)
     public static Integer [] startIndexes(){
         ArrayList<Integer> liste = new ArrayList<>();
+
         int current = Integer.parseInt(data[0][0]);
+        liste.add(0);
         for(int i=0;i<data[0].length;i++){
             if(Integer.parseInt(data[0][i])!=current){
                 current = Integer.parseInt(data[0][i]);
                 liste.add(i);
             }
         }
+        liste.add(data[0].length-1);
         indexes= new Integer[liste.size()];
         return (Integer[]) liste.toArray(indexes);
     }
 
-    public static int howManyLines(String fileName){
-        BufferedReader br;
-        int nLines=0;
-        try{
-            br = new BufferedReader(new FileReader(fileName));
-            String line = br.readLine();
-            while (line != null) {
-                nLines++;
-                line = br.readLine();
+    public static String smart4_search(String request) throws InterruptedException {
+        String[] split_request = request.split(";",2);
+        if (split_request.length == 2) {
+            String [] request_types;
+            if (split_request[0].length() != 0) {
+                request_types = split_request[0].split(",");
+            } else { // If no <types> specified then all
+                request_types = new String[] {"0", "1", "2", "3", "4", "5"};
             }
-            br.close();
-        }catch(Exception e){
-            System.err.println("Error in howManyLines(): " + e);
-            System.exit(-1);
-        }
-        return nLines;
-    }
+            String regex = split_request[1];
 
-    public static void displayDb(String [][] data) {
-        for(int i=0;i<data[0].length && i<1000;i++){
-            System.out.println("type:"+data[0][i]+" val:"+data[1][i]);
+            threads = new Thread[request_types.length*NTPT];
+            //System.out.println("threads.length:"+threads.length);
+            int index;
+
+            // creating and lauching all the threads
+            for( int i=0;i<request_types.length;i++){
+                index = Integer.parseInt(request_types[i]);
+                int D = indexes[index+1]-indexes[index]; // delta/distance
+                D/= NTPT; // distance per threads
+                indexes[index]-=1; // ugly trick to partition the limits of threads
+                int j;
+                for(j=0;j<NTPT-1;j++){
+                    threads[(i*NTPT)+j] = new  MultiSearchSmart(regex,(indexes[index]+j*D)+1,indexes[index]+(j+1)*D);
+                    threads[(i*NTPT)+j].start();
+                }
+                threads[(i*NTPT)+j] = new  MultiSearchSmart(regex,(indexes[index]+j*D)+1,indexes[index+1]-1); // division pas tjrs entière du coup on prend le "reste"
+                threads[(i*NTPT)+j].start();
+                indexes[index]++; // compense the ugly trick
+            }
+
+            // waiting for all the threads to finish
+            for(int k=0;k< threads.length;k++){
+                threads[k].join();
+            }
+
+            if (output.length() == 0)
+                return "No match found";
+            else
+                return output;
+        } else {
+            return "Usage: <types>;<regex>";
         }
+
     }
 
     public static void smart_dbLoad(String fileName) throws IOException {
@@ -179,44 +201,28 @@ public class SmartServer {
 
     }
 
-    public static String smart4_search(String request) throws InterruptedException {
-        String[] split_request = request.split(";",2);
-        if (split_request.length == 2) {
-            String [] request_types;
-            if (split_request[0].length() != 0) {
-                request_types = split_request[0].split(",");
-            } else { // If no <types> specified then all
-                request_types = new String[] {"0", "1", "2", "3", "4", "5"};
+    public static int howManyLines(String fileName){
+        BufferedReader br;
+        int nLines=0;
+        try{
+            br = new BufferedReader(new FileReader(fileName));
+            String line = br.readLine();
+            while (line != null) {
+                nLines++;
+                line = br.readLine();
             }
-            String regex = split_request[1];
-
-
-            int start =0;
-            int i=0;
-
-            for( i=0;i< request_types.length-1;i++){
-                threads[i] = new  MultiSearchSmart(regex,start,indexes[i]);
-                threads[i].start();
-                start=indexes[i]+1;
-            }
-
-            threads[i] = new  MultiSearchSmart(regex,start,data[0].length-1);
-            threads[i].start();
-            for(int k=0;k<threads.length;k++){
-                threads[k].join();
-            }
-
-
-
-
-            if (output.length() == 0)
-                return "No match found";
-            else
-                return output;
-        } else {
-            return "Usage: <types>;<regex>";
+            br.close();
+        }catch(Exception e){
+            System.err.println("Error in howManyLines(): " + e);
+            System.exit(-1);
         }
+        return nLines;
+    }
 
+    public static void displayDb(String [][] data) {
+        for(int i=0;i<data[0].length && i<1000;i++){
+            System.out.println("type:"+data[0][i]+" val:"+data[1][i]);
+        }
     }
     
 
@@ -231,18 +237,24 @@ public class SmartServer {
             }
             String regex = split_request[1];
 
-
-            Thread t1 = new   MultiSearch(request_types,regex,0, NLINES/3);
+            threads = new Thread[NTHREADS];
+            for(int i=0;i<threads.length;i++){
+                threads[i]=new MultiSearch(request_types,regex,(NLINES/NTHREADS)*i, (NLINES/NTHREADS)*(i+1));
+                threads[i].start();
+            }
+            /*Thread t1 = new MultiSearch(request_types,regex,0, NLINES/3);
             Thread t2 = new MultiSearch(request_types,regex,(NLINES/3) + 1, (NLINES/3)*2);
             Thread t3 = new MultiSearch(request_types,regex,(NLINES/3)*2 + 1, NLINES-1);
             t1.start();
             t2.start();
             t3.start();
-
-
             t1.join();
             t2.join();
-            t3.join();
+            t3.join();*/
+
+            for(int i=0;i<threads.length;i++){
+                threads[i].join();
+            }
 
 
 

@@ -20,10 +20,7 @@ public class MultiSearchSmart extends Thread{
         this.regex=regex;
     }
     public void run(){
-        //long start = System.currentTimeMillis();
         searchThread();
-        //long stop = System.currentTimeMillis();
-       // System.out.println("timer4:"+(stop-start));
     }
 
     public void searchThread() {
