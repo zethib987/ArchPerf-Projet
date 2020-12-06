@@ -6,23 +6,21 @@ public class SmartServer {
     static String FILEPATH = "C:\\Users\\Thib\\Documents\\unif\\2020-2021\\Q1\\Architecture and Perf\\projet\\Prototype\\src\\dbdata.txt";
     static int portNumber = 4444;
 
-    static String [] types;
-    static String [] sentences;
+
     static String data [][];
     static int NLINES=0;
     static String output="";
-    static String test[][];
-    static Integer indexes[];
     static int NTPT=3; // number of threads per type
     static int NTHREADS=6; // number of threads for the smart3 search
 
+    static Integer indexes[];
     static Thread threads[];
 
     static String request1 = "1,3;the(.*)";
     static String request2 = "0,4;civ(.*)";
     static String request3 = ";FER(.*)";
-    static String request4 = "1;why(.*)";
-    //String [] requests = {request1,request2,request3,request4};
+    static String request4 = ";why(.*)";
+
 
 
     public static void main(String []args) throws InterruptedException {
@@ -37,8 +35,7 @@ public class SmartServer {
             System.out.println(e);
         }
         System.out.println("Database loaded");
-        System.out.println(NLINES);
-
+        System.out.println("Number of lines:"+NLINES);
         QuickSort.quickSort();
         indexes=startIndexes();
         for(int i=0;i<indexes.length;i++) System.out.println(indexes[i]);
@@ -47,7 +44,7 @@ public class SmartServer {
 
 
         // displayDb(data);
-        Test(100);
+        Test(50);
 
        /* boolean listening = true;
         // Launch a multi server thread for each client
@@ -66,7 +63,7 @@ public class SmartServer {
 
     }
 
-    public static void Test(int nTest)  {
+    public static void Test(int nTest){ // sur ma machine la première fonction est généralement avantagée => si on test 2 fois la même, la première sera en générale plus rapide
         long [] res = new long [2];
         long start,finish,timeElapsed;
         start=0;
@@ -92,7 +89,6 @@ public class SmartServer {
             System.out.println(e);
         }
 
-        String s="";
         for(int i=0;i<nTest;i++) {
             try { // Load database
                 start =System.currentTimeMillis();
@@ -110,14 +106,11 @@ public class SmartServer {
         System.out.println("meanTime 1:"+ res[0]);
         System.out.println("meanTime 2:"+ res[1]);
 
-
-
     }
 
     // assuming that the indexes are consecutive numbers that start from 0 to n-1 (with n= number of threads)
     public static Integer [] startIndexes(){
         ArrayList<Integer> liste = new ArrayList<>();
-
         int current = Integer.parseInt(data[0][0]);
         liste.add(0);
         for(int i=0;i<data[0].length;i++){
@@ -131,6 +124,7 @@ public class SmartServer {
         return (Integer[]) liste.toArray(indexes);
     }
 
+
     public static String smart4_search(String request) throws InterruptedException {
         String[] split_request = request.split(";",2);
         if (split_request.length == 2) {
@@ -143,23 +137,22 @@ public class SmartServer {
             String regex = split_request[1];
 
             threads = new Thread[request_types.length*NTPT];
-            //System.out.println("threads.length:"+threads.length);
-            int index;
+
 
             // creating and lauching all the threads
             for( int i=0;i<request_types.length;i++){
-                index = Integer.parseInt(request_types[i]);
+                int index = Integer.parseInt(request_types[i]);
                 int D = indexes[index+1]-indexes[index]; // delta/distance
                 D/= NTPT; // distance per threads
                 indexes[index]-=1; // ugly trick to partition the limits of threads
                 int j;
-                for(j=0;j<NTPT-1;j++){
+                for(j=0;j<NTPT-1;j++){ // on laisse le dernier pour après car cas particulier
                     threads[(i*NTPT)+j] = new  MultiSearchSmart(regex,(indexes[index]+j*D)+1,indexes[index]+(j+1)*D);
                     threads[(i*NTPT)+j].start();
                 }
                 threads[(i*NTPT)+j] = new  MultiSearchSmart(regex,(indexes[index]+j*D)+1,indexes[index+1]-1); // division pas tjrs entière du coup on prend le "reste"
                 threads[(i*NTPT)+j].start();
-                indexes[index]++; // compense the ugly trick
+                indexes[index]++; // correct the ugly trick's effect
             }
 
             // waiting for all the threads to finish
@@ -267,41 +260,6 @@ public class SmartServer {
         }
 
     }
-
-
-
-
-    public static String smart2_search(String request) {
-        String[] split_request = request.split(";",2);
-        if (split_request.length == 2) {
-            String [] request_types;
-            if (split_request[0].length() != 0) {
-                request_types = split_request[0].split(",");
-            } else { // If no <types> specified then all
-                request_types = new String[] {"0", "1", "2", "3", "4", "5"};
-            }
-            String regex = split_request[1];
-            StringBuffer sb = new StringBuffer();
-
-            for (int i = 0; i < data[0].length; i++) {
-                for (String request_type : request_types) {
-                    if (data[0][i] == request_type && data[1][i].matches(regex)) {
-                        sb.append("|" + i + ": " + data[1][i] + "|");
-                    }
-                }
-            }
-
-            String output = sb.toString();
-            if (output.length() == 0)
-                return "No match found";
-            else
-                return output;
-        } else {
-            return "Usage: <types>;<regex>";
-        }
-
-    }
-
 
 
 }

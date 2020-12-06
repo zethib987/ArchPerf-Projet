@@ -1,4 +1,6 @@
 import java.util.concurrent.Semaphore;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MultiSearchSmart extends Thread{
 
@@ -7,7 +9,7 @@ public class MultiSearchSmart extends Thread{
     private String regex;
     static String[] request_types= {"0", "1", "2", "3", "4", "5"};
 
-    static int NUMBERSEM= 1;
+    static int NUMBERSEM= 1; // nombre de semaphore, ici 1 car il est utilisé comme un mutex
     static Semaphore semaphore = new Semaphore(NUMBERSEM);
 
     public MultiSearchSmart(){
@@ -20,15 +22,15 @@ public class MultiSearchSmart extends Thread{
         this.regex=regex;
     }
     public void run(){
-        searchThread();
+      searchThread();
     }
 
     public void searchThread() {
         StringBuffer sb = new StringBuffer();
-        for (int i = start; i <= end; i++) {
-                if (SmartServer.data[1][i].matches(regex)) {
-                    sb.append("|" + i + ": " + SmartServer.data[1][i] + "|");
-                }
+        for (int i = start; i <= end; i++){
+            if (SmartServer.data[1][i].matches(regex)) {
+                sb.append("|" + i + ": " + SmartServer.data[1][i] + "|");
+            }
         }
         try {
             semaphore.acquire();
@@ -38,4 +40,6 @@ public class MultiSearchSmart extends Thread{
         SmartServer.output+=sb.toString();
         semaphore.release();
     }
+
+
 }
