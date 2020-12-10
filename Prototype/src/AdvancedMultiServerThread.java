@@ -16,8 +16,7 @@ public class AdvancedMultiServerThread extends Thread{
 
         try (
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         ) {
             String inputLine, outputLine;
             outputLine = "Connected to server";

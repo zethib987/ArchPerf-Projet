@@ -2,10 +2,10 @@ import java.io.*;
 
 public class LaunchTest {
 
-    public static int nClients = 100;
-    public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\regex.txt";
-    public static int minWait = 300;
-    public static int boundWait = 500;
+    public static int nClients = 5;
+    public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\regexSmall.txt";
+    public static int minWait = 400;
+    public static int boundWait = 300;
     public static boolean printDetails = false;
     public static boolean printOutput = false;
 
@@ -17,19 +17,18 @@ public class LaunchTest {
 
     public static void main(String[] args) throws InterruptedException {
 
-        clients = new ThreadClient[nClients];
-        times = new long[nClients][];
-        means = new long[nClients];
-        totals = new long[nClients];
-
         try{ // Load regex
             loadRegex(FILEPATH);
         } catch (Exception e){ // Handle exception
             System.err.println(e);
         }
 
+        clients = new ThreadClient[nClients];
+        times = new long[nClients][];
+        means = new long[nClients];
+        totals = new long[nClients];
+
         for (int i = 0; i < nClients; i++) {
-            System.out.println("Creating client " + i);
             clients[i] = new ThreadClient(regex, minWait, boundWait, printOutput);
         }
 

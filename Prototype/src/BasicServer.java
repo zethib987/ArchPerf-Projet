@@ -6,18 +6,18 @@ public class BasicServer {
 
     public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\dbdata.txt";
     public static int portNumber = 4444;
-    public static int NClientsSimultaneity = 20;
+    public static int NClientsSimultaneity = 100;
     public static boolean print = false;
 
-    public static Semaphore semaphore;
+    public static Semaphore semData;
     public static String [] types;
     public static String [] sentences;
 
     public static void main(String []args){
 
-        semaphore = new Semaphore(NClientsSimultaneity);
-
         System.out.println("Launching server");
+        semData = new Semaphore(NClientsSimultaneity);
+
         System.out.println("Loading database");
         try{ // Load database
             raw_dbLoad(FILEPATH);
@@ -31,7 +31,7 @@ public class BasicServer {
         // Launch a multi server thread for each client
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             while (listening) {
-                new BasicMultiServerThread(serverSocket.accept(), semaphore, types, sentences, print).start();
+                new BasicMultiServerThread(serverSocket.accept(), semData, types, sentences, print).start();
             }
         } catch (IOException e) { // Error on port listening
             System.err.println("Could not listen on port " + portNumber);

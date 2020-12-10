@@ -7,7 +7,7 @@ public class AdvancedMultiSearch extends Thread{
     private String regex;
     static String[] request_types= {"0", "1", "2", "3", "4", "5"};
 
-    static int NUMBERSEM= 1; // nombre de semaphore, ici 1 car il est utilisé comme un mutex
+    static int NUMBERSEM= 1; // nombre de semData, ici 1 car il est utilisé comme un mutex
     static Semaphore semaphore = new Semaphore(NUMBERSEM);
 
     public AdvancedMultiSearch(){

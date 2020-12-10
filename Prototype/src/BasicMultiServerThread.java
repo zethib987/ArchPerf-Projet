@@ -4,15 +4,15 @@ import java.util.concurrent.Semaphore;
 
 public class BasicMultiServerThread extends Thread{
     public final Socket socket;
-    public static Semaphore semaphore;
+    public static Semaphore semData;
     public static String[] types;
     public static String[] sentences;
     public static boolean print;
 
-    public BasicMultiServerThread(Socket socket, Semaphore semaphore, String [] types, String [] sentences, boolean print) {
+    public BasicMultiServerThread(Socket socket, Semaphore semData, String [] types, String [] sentences, boolean print) {
         super("BasicMultiServerThread");
         this.socket = socket;
-        this.semaphore = semaphore;
+        this.semData = semData;
         this.types = types;
         this.sentences = sentences;
         this.print = print;
@@ -29,12 +29,13 @@ public class BasicMultiServerThread extends Thread{
             out.println(outputLine);
 
             while ((inputLine = in.readLine()) != null) {
-                semaphore.acquire(1); // wait for the sem to be available
+                semData.acquire(1); // wait for the sem to be available
                 if (print) {
                     System.out.println("Request: " + inputLine);
                 }
-                out.println(raw_search(inputLine)); // Basic server
-                semaphore.release(1); // free the sem
+                outputLine = raw_search(inputLine);
+                semData.release(1); // free the sem
+                out.println(outputLine);
             }
             socket.close();
         } catch (IOException e) {
