@@ -3,11 +3,11 @@ import java.io.*;
 
 public class Client {
 
-    public static void main(String []args){
-        System.out.println(args[0]);
+    public static String hostName ="localhost";
+    public static int portNumber = 4444;
+    public static boolean print = true;
 
-        String hostName ="localhost";
-        int portNumber = 4444;
+    public static void main(String[] args){
 
         System.out.println("Launching client");
 
@@ -16,18 +16,18 @@ public class Client {
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         ) {
-            BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-            String fromServer;
-            String fromUser;
+           BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+            String fromServer, fromUser;
 
             while ((fromServer = in.readLine()) != null) { // Wait for the server to answer
-
                 if (fromServer.equals("Connected to server")) { // Init of connection
                     System.out.println("Connected to server");
                     System.out.println("Client is ready");
                 } else { // Request answer
-                    System.out.println(fromServer); // Print answer
-                } // Wait for a request from User
+                    if (print) {
+                        System.out.println(fromServer.replace("@@@", "\n")); // Print answer
+                    }
+                }
                 fromUser = stdIn.readLine();
                 if (fromUser != null) {
                     out.println(fromUser);
@@ -41,4 +41,6 @@ public class Client {
             System.exit(1);
         }
     }
+
+
 }

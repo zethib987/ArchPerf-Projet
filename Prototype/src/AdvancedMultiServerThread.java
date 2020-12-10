@@ -2,13 +2,13 @@ import java.net.*;
 import java.io.*;
 import java.util.concurrent.Semaphore;
 
-public class MultiServerThread extends Thread{
+public class AdvancedMultiServerThread extends Thread{
     private Socket socket = null;
-    static int NUMBERSEM= 1;
+    static int NUMBERSEM = 1;
     static Semaphore semaphore = new Semaphore(NUMBERSEM);
 
-    public MultiServerThread(Socket socket) {
-        super("MultiServerThread");
+    public AdvancedMultiServerThread(Socket socket) {
+        super("AdvancedMultiServerThread");
         this.socket = socket;
     }
 
@@ -17,8 +17,7 @@ public class MultiServerThread extends Thread{
         try (
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(
-                        new InputStreamReader(
-                                socket.getInputStream()));
+                        new InputStreamReader(socket.getInputStream()));
         ) {
             String inputLine, outputLine;
             outputLine = "Connected to server";
@@ -27,9 +26,8 @@ public class MultiServerThread extends Thread{
             while ((inputLine = in.readLine()) != null) {
                 semaphore.acquire(); // wait for the sem to be available
                 System.out.println("Request: " + inputLine);
-                out.println(Server.raw_search(inputLine));
+                out.println(AdvancedServer.smart4_search(inputLine));
                 semaphore.release(); // free the sem
-
             }
             socket.close();
         } catch (IOException e) {

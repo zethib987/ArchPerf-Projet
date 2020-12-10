@@ -31,8 +31,8 @@ public class MultiSearch extends Thread{
         StringBuffer sb = new StringBuffer();
         for (int i = start; i <= end; i++) {
             for (String request_type : request_types) {
-                if (SmartServer.data[0][i].equals(request_type) && SmartServer.data[1][i].matches(regex)) {
-                    sb.append("|" + i + ": " + SmartServer.data[1][i] + "|");
+                if (AdvancedServer.data[0][i].equals(request_type) && AdvancedServer.data[1][i].matches(regex)) {
+                    sb.append(AdvancedServer.data[1][i] + "@@@");
                 }
             }
         }
@@ -41,7 +41,7 @@ public class MultiSearch extends Thread{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        SmartServer.output+=sb.toString();
+        AdvancedServer.output+=sb.toString();
         semaphore.release();
     }
 }

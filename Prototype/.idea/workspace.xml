@@ -19,11 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="decbe982-f378-42cb-8138-9fcee035de79" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MultiSearchSmart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MultiSearchSmart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SmartServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SmartServer.java" afterDir="false" />
-    </list>
+    <list default="true" id="a83932ba-e8ba-4258-90bf-e6cf535c811f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,7 +35,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="1l37wKJUJzp4DhyGPMWr2wVok0L" />
+  <component name="ProjectId" id="1lPsSrADk2nbREhTokjF4ZRII0C" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -47,53 +43,54 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
-  <component name="RunManager" selected="Application.SmartServer">
+  <component name="RunManager" selected="Application.LaunchTest">
+    <configuration name="AdvancedServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="AdvancedServer" />
+      <module name="Prototype" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BasicServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="BasicServer" />
+      <module name="Prototype" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Client" />
       <module name="Prototype" />
-      <option name="PROGRAM_PARAMETERS" value="localhost" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Server" />
+    <configuration name="LaunchTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="LaunchTest" />
       <module name="Prototype" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmartServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="SmartServer" />
-      <module name="Prototype" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <list>
-      <item itemvalue="Application.Client" />
-      <item itemvalue="Application.Server" />
-      <item itemvalue="Application.SmartServer" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.SmartServer" />
+        <item itemvalue="Application.LaunchTest" />
+        <item itemvalue="Application.BasicServer" />
         <item itemvalue="Application.Client" />
-        <item itemvalue="Application.Server" />
+        <item itemvalue="Application.AdvancedServer" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="decbe982-f378-42cb-8138-9fcee035de79" name="Default Changelist" comment="" />
-      <created>1606814157814</created>
+      <changelist id="a83932ba-e8ba-4258-90bf-e6cf535c811f" name="Default Changelist" comment="" />
+      <created>1607510064102</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1606814157814</updated>
+      <updated>1607510064102</updated>
     </task>
     <servers />
   </component>
@@ -110,57 +107,64 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="292" y="174" width="1092" height="615" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606925424427">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="292" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606925424427" />
-    <state x="172" y="315" width="1092" height="615" key="#com.intellij.execution.impl.EditConfigurationsDialog/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1606821149852" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1607281405459">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607281405459" />
-    <state width="1815" height="280" key="GridCell.Tab.0.bottom/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1606826017063" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1607281405459">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607281405459" />
-    <state width="1815" height="280" key="GridCell.Tab.0.center/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1606826017063" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1607281405459">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607281405459" />
-    <state width="1815" height="280" key="GridCell.Tab.0.left/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1606826017063" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1607281405459">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607281405459" />
-    <state width="1815" height="280" key="GridCell.Tab.0.right/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1606826017063" />
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1607209092290">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607209092290" />
-    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1607209092289">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607209092289" />
-    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1607209092289">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607209092289" />
-    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1607209092289">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607209092289" />
-    <state x="569" y="146" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1607186834869">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="569" y="146" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1607186834869" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1606820765150">
+    <state x="743" y="364" key="#Notifications" timestamp="1607595225832">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1606820765150" />
+    <state x="743" y="364" key="#Notifications/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607595225832" />
+    <state x="796" y="246" key="#com.intellij.ide.util.MemberChooser" timestamp="1607523545410">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state x="796" y="246" key="#com.intellij.ide.util.MemberChooser/62.0.1858.1080@62.0.1858.1080" timestamp="1607523545410" />
+    <state width="1815" height="324" key="GridCell.Tab.0.bottom" timestamp="1607595574230">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="324" key="GridCell.Tab.0.bottom/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607595574230" />
+    <state width="1815" height="422" key="GridCell.Tab.0.bottom/62.0.1858.1080@62.0.1858.1080" timestamp="1607529446453" />
+    <state width="1815" height="324" key="GridCell.Tab.0.center" timestamp="1607595574230">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="324" key="GridCell.Tab.0.center/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607595574230" />
+    <state width="1815" height="422" key="GridCell.Tab.0.center/62.0.1858.1080@62.0.1858.1080" timestamp="1607529446453" />
+    <state width="1815" height="324" key="GridCell.Tab.0.left" timestamp="1607595574230">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="324" key="GridCell.Tab.0.left/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607595574230" />
+    <state width="1815" height="422" key="GridCell.Tab.0.left/62.0.1858.1080@62.0.1858.1080" timestamp="1607529446453" />
+    <state width="1815" height="324" key="GridCell.Tab.0.right" timestamp="1607595574230">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="324" key="GridCell.Tab.0.right/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607595574230" />
+    <state width="1815" height="422" key="GridCell.Tab.0.right/62.0.1858.1080@62.0.1858.1080" timestamp="1607529446453" />
+    <state width="1815" height="364" key="GridCell.Tab.1.bottom" timestamp="1607545740813">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="364" key="GridCell.Tab.1.bottom/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607545740813" />
+    <state width="1815" height="364" key="GridCell.Tab.1.bottom/62.0.1858.1080@62.0.1858.1080" timestamp="1607525038966" />
+    <state width="1815" height="364" key="GridCell.Tab.1.center" timestamp="1607545740813">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="364" key="GridCell.Tab.1.center/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607545740813" />
+    <state width="1815" height="364" key="GridCell.Tab.1.center/62.0.1858.1080@62.0.1858.1080" timestamp="1607525038965" />
+    <state width="1815" height="364" key="GridCell.Tab.1.left" timestamp="1607545740813">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="364" key="GridCell.Tab.1.left/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607545740813" />
+    <state width="1815" height="364" key="GridCell.Tab.1.left/62.0.1858.1080@62.0.1858.1080" timestamp="1607525038965" />
+    <state width="1815" height="364" key="GridCell.Tab.1.right" timestamp="1607545740813">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state width="1815" height="364" key="GridCell.Tab.1.right/62.0.1858.1080/1920.0.1920.1040@62.0.1858.1080" timestamp="1607545740813" />
+    <state width="1815" height="364" key="GridCell.Tab.1.right/62.0.1858.1080@62.0.1858.1080" timestamp="1607525038965" />
+    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1607522854563">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1607522854563" />
   </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Prototype$Client.ic" NAME="Client Coverage Results" MODIFIED="1606926594816" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.io.InputStreamReader" memberName="sd" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>
