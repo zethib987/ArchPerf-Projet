@@ -2,11 +2,11 @@ import java.io.*;
 
 public class LaunchTest {
 
-    public static int nClients = 5;
-    public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\regexSmall.txt";
-    public static int minWait = 400;
-    public static int boundWait = 300;
-    public static boolean printDetails = false;
+    public static int nClients = 100;
+    public static String FILEPATH = "/media/sf_ArchPerf-Projet/regexSmall.txt";
+    public static int minWait = 300;
+    public static int boundWait = 1;
+    public static boolean printDetails = true;
     public static boolean printOutput = false;
 
     public static ThreadClient[] clients;
@@ -24,35 +24,41 @@ public class LaunchTest {
         }
 
         clients = new ThreadClient[nClients];
-        times = new long[nClients][];
+        times = new long[nClients][regex.length];
         means = new long[nClients];
         totals = new long[nClients];
 
         for (int i = 0; i < nClients; i++) {
-            clients[i] = new ThreadClient(regex, minWait, boundWait, printOutput);
+            clients[i] = new ThreadClient(regex, times[i], minWait, boundWait, printOutput);
         }
 
+        System.out.println("Launching " + nClients + " clients");
         for (int i = 0; i < nClients; i++) {
-            System.out.println("Launching client " + i);
             clients[i].start();
         }
 
+        long start = System.currentTimeMillis();
         for (int i = 0; i < clients.length; i++) {
             System.out.println("Waiting client " + i);
             clients[i].join();
-            times[i] = clients[i].get_times();
+            //times[i] = clients[i].get_times();
         }
+
+        long finish = System.currentTimeMillis();
 
         for (int i = 0; i < clients.length; i++) {
             long total = 0;
             for (int j = 0; j < times[i].length; j++) {
+                if (times[i][j] < 0) {
+                    System.out.println("client = " + i + " request = " + j);
+                }
                 total += times[i][j];
             }
             totals[i] = total;
-            means[i] = total/times[i].length;
+            means[i] = total/regex.length;
             if (printDetails) {
                 System.out.println("Mean time by request " + means[i] + " ms for client " + i);
-                System.out.println("Total time for all the requests " + total + " ms for client " + i);
+                //System.out.println("Total time for all the requests " + total + " ms for client " + i);
             }
         }
 
@@ -63,7 +69,8 @@ public class LaunchTest {
         }
         mean /= clients.length;
         System.out.println("Mean time by request " + mean + " ms for all clients ");
-        System.out.println("Total time for all clients " + total + " ms for all clients ");
+        System.out.println("Total time elapsed: " + (finish - start));
+        //System.out.println("Total time for all clients " + total + " ms for all clients ");
 
     }
 

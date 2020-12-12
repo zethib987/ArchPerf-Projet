@@ -12,10 +12,10 @@ public class BasicMultiServerThread extends Thread{
     public BasicMultiServerThread(Socket socket, Semaphore semData, String [] types, String [] sentences, boolean print) {
         super("BasicMultiServerThread");
         this.socket = socket;
-        this.semData = semData;
-        this.types = types;
-        this.sentences = sentences;
-        this.print = print;
+        BasicMultiServerThread.semData = semData;
+        BasicMultiServerThread.types = types;
+        BasicMultiServerThread.sentences = sentences;
+        BasicMultiServerThread.print = print;
     }
 
     public void run() {

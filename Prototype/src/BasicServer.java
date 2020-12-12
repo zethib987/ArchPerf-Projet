@@ -4,9 +4,9 @@ import java.util.concurrent.Semaphore;
 
 public class BasicServer {
 
-    public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\dbdata.txt";
+    public static String FILEPATH = "/media/sf_ArchPerf-Projet/dbdata.txt";
     public static int portNumber = 4444;
-    public static int NClientsSimultaneity = 100;
+    public static int NClientsSimultaneity = 1000;
     public static boolean print = false;
 
     public static Semaphore semData;

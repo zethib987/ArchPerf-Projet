@@ -10,19 +10,20 @@ public class ThreadClient extends Thread{
     // DON'T TOUCH
     public static String[] regex;
     public static boolean printOutput;
-    public volatile long[] times;
-    public static long[] finishs;
-    public static long[] starts;
+    //public volatile long[] times;
+    public long[] times;
+    public long[] finishs;
+    public long[] starts;
     public static int minWait;
     public static int boundWait;
 
-    public ThreadClient(String[] regex, int minWait, int boundWait, boolean printOutput) {
+    public ThreadClient(String[] regex, long[] times, int minWait, int boundWait, boolean printOutput) {
         super("ThreadClient");
-        this.regex = regex;
-        this.times = new long[regex.length];
-        this.minWait = minWait;
-        this.boundWait = boundWait;
-        this.printOutput = printOutput;
+        ThreadClient.regex = regex;
+        this.times = times;
+        ThreadClient.minWait = minWait;
+        ThreadClient.boundWait = boundWait;
+        ThreadClient.printOutput = printOutput;
     }
 
     public void run(){
@@ -85,11 +86,11 @@ public class ThreadClient extends Thread{
 
                     MakeRequestThread request = new MakeRequestThread(out, regex, starts, boundWait, minWait);
                     ReadDataThread read = new ReadDataThread(in, finishs, printOutput);
-                    request.start();
                     read.start();
+		            request.start();
 
+		            read.join();
                     request.join();
-                    read.join();
                     for (int i = 0; i < times.length; i++) {
                         times[i] = finishs[i] - starts[i];
                     }
@@ -110,18 +111,18 @@ public class ThreadClient extends Thread{
         }
     }
 
-    public long[] get_times(){
-        return times;
-    }
+    //public long[] get_times(){
+    //    return times;
+    //}
 
 }
 
 class ReadDataThread extends Thread {
 
-    BufferedReader in;
-    int regex_ind;
-    long[] finishs;
-    boolean printOutput;
+    public BufferedReader in;
+    public int regex_ind;
+    public long[] finishs;
+    public boolean printOutput;
 
     ReadDataThread(BufferedReader in, long[] finishs, boolean printOutput) {
         super("ReadDataThread");
@@ -135,12 +136,12 @@ class ReadDataThread extends Thread {
         String fromServer;
         try {
             while ((fromServer = in.readLine()) != null) {
+                finishs[regex_ind] = System.currentTimeMillis();
                 if (printOutput) {
                     System.out.println(fromServer.replace("@@@", "\n")); // Print answer
                 }
-                finishs[regex_ind] = System.currentTimeMillis();
                 regex_ind ++;
-                if (regex_ind >= finishs.length){
+                if (!(regex_ind < finishs.length)){
                     in.close();
                     break;
                 }
@@ -154,12 +155,12 @@ class ReadDataThread extends Thread {
 
 class MakeRequestThread extends Thread {
 
-    PrintWriter out;
-    String[] regex;
-    int regex_ind;
-    volatile long[] starts;
-    int boundWait;
-    int minWait;
+    public PrintWriter out;
+    public String[] regex;
+    public int regex_ind;
+    public long[] starts;
+    public int boundWait;
+    public int minWait;
 
     MakeRequestThread(PrintWriter out, String[] regex, long[] starts, int boundWait, int minWait) {
         super("MakeRequestThread");
