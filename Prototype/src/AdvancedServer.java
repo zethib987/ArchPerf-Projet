@@ -4,14 +4,15 @@ import java.util.*;
 
 public class AdvancedServer {
 
-    static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\dbdata.txt";
+    static String FILEPATH = "C:\\Users\\Thib\\Documents\\unif\\2020-2021\\Q1\\Architecture and Perf\\projet\\Prototype\\src\\dbdata.txt";
     static int portNumber = 4444;
 
     static String data [][];
     static int NLINES=0;
     static String output="";
-    static int NTPT=3; // number of threads per type
-    static int NTHREADS=6; // number of threads for the smart3 search
+    static int NTPT=4; // number of threads per type, opti si = le nombre de coeur sur le pc
+    static int NThreadLimit=NTPT;
+    static int nCurrentClients=0;
 
     static Integer indexes[];
     static Thread threads[];
@@ -45,6 +46,9 @@ public class AdvancedServer {
         catch (Exception e){ // Other error
             System.err.println("Error while initiating the multi server: " + e);
             System.exit(-1);
+        }
+        finally {
+            System.out.println("Byee byyye");
         }
 
     }
@@ -108,6 +112,9 @@ public class AdvancedServer {
     }
 
     public static String smart4_search(String request) throws InterruptedException {
+        if(nCurrentClients>NThreadLimit)NTPT=1;
+        else NTPT=NThreadLimit/nCurrentClients;
+
         String[] split_request = request.split(";",2);
         if (split_request.length == 2) {
             String [] request_types;
@@ -150,91 +157,6 @@ public class AdvancedServer {
         }
 
     }
-
-    public static String smart3_search(String request) throws InterruptedException {
-        String[] split_request = request.split(";",2);
-        if (split_request.length == 2) {
-            String [] request_types;
-            if (split_request[0].length() != 0) {
-                request_types = split_request[0].split(",");
-            } else { // If no <types> specified then all
-                request_types = new String[] {"0", "1", "2", "3", "4", "5"};
-            }
-            String regex = split_request[1];
-
-            threads = new Thread[NTHREADS];
-            for(int i=0;i<threads.length;i++){
-                threads[i]=new MultiSearch(request_types,regex,(NLINES/NTHREADS)*i, (NLINES/NTHREADS)*(i+1));
-                threads[i].start();
-            }
-
-            for(int i=0;i<threads.length;i++){
-                threads[i].join();
-            }
-
-            if (output.length() == 0)
-                return "No match found";
-            else
-                return output;
-        } else {
-            return "Usage: <types>;<regex>";
-        }
-
-    }
-
-    /*
-    public static void displayDb(String [][] data) {
-        for(int i=0;i<data[0].length && i<1000;i++){
-            System.out.println("type:"+data[0][i]+" val:"+data[1][i]);
-        }
-    }
-
-
-    public static void Test(int nTest){ // sur ma machine la première fonction est généralement avantagée => si on test 2 fois la même, la première sera en générale plus rapide
-        long [] res = new long [2];
-        long start,finish,timeElapsed;
-        start=0;
-        for(int i=0;i<nTest;i++) {
-            try { // Load database
-                start = System.currentTimeMillis();
-                smart3_search(request4);
-            } catch (Exception e) { // Handle exception
-                System.out.println(e);
-            }
-            finish = System.currentTimeMillis();
-            timeElapsed = finish - start;
-            res[0]+=timeElapsed;
-
-        }
-        res[0]/=nTest;
-
-
-        try {
-            Thread.sleep(5);
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
-
-        for(int i=0;i<nTest;i++) {
-            try { // Load database
-                start =System.currentTimeMillis();
-                smart4_search(request4);
-            } catch (Exception e) { // Handle exception
-                System.out.println(e);
-            }
-            finish = System.currentTimeMillis();
-            timeElapsed = finish - start;
-            res[1]+=timeElapsed;
-
-        }
-        res[1]/=nTest;
-
-        System.out.println("meanTime 1:"+ res[0]);
-        System.out.println("meanTime 2:"+ res[1]);
-
-    }
-     */
 
 
 }
