@@ -7,22 +7,18 @@ public class ThreadClient extends Thread{
     public static String hostName = "localhost";
     public static int portNumber = 4444;
 
-    // DON'T TOUCH
     public static String[] regex;
     public static boolean printOutput;
-    //public volatile long[] times;
     public long[] times;
     public long[] finishs;
     public long[] starts;
-    public static int minWait;
-    public static int boundWait;
+    public static double lambda;
 
-    public ThreadClient(String[] regex, long[] times, int minWait, int boundWait, boolean printOutput) {
+    public ThreadClient(String[] regex, long[] times, double lambda, boolean printOutput) {
         super("ThreadClient");
         ThreadClient.regex = regex;
         this.times = times;
-        ThreadClient.minWait = minWait;
-        ThreadClient.boundWait = boundWait;
+        ThreadClient.lambda = lambda;
         ThreadClient.printOutput = printOutput;
     }
 
@@ -35,47 +31,17 @@ public class ThreadClient extends Thread{
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         ) {
-            // DON'T TOUCH
-            String fromServer;
-            int regex_ind = 0, random_wait = 0;
-            long start = 0, finish = 0;
+
             Random ran = new Random();
+            try {
+                Thread.sleep(ran.nextInt(50));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            String fromServer;
             finishs = new long[times.length];
             starts = new long[times.length];
-
-            /* !!!!!! TO KEEP !!!!!!
-            while ((fromServer = in.readLine()) != null) { // Wait for the server to answer
-                if (fromServer.equals("Connected to server")) { // Init of connection
-                    if (printOutput) {
-                        System.out.println("Connected to server");
-                        System.out.println("Client is ready");
-                    }
-                    // lancer un thread de lecture des reponses
-                    Thread read = new ReadDataThread(in, finishs, printOutput);
-                    read.start();
-                    // lancer un thread d'envoie de requetes
-                    Thread request = new MakeRequestThread(out, regex, starts, boundWait, minWait);
-                    request.start();
-                } else { // Request answer
-                    if (printOutput) {
-                        System.out.println(fromServer.replace("@@@", "\n")); // Print answer
-                    }
-                    finish = System.currentTimeMillis();
-                    times[regex_ind - 1] = finish - start;
-                }
-                // Wait for a request from User
-                if (regex_ind < regex.length) { // Use file
-                    random_wait = ran.nextInt(boundWait) + minWait;
-                    Thread.sleep(random_wait);
-                    start = System.currentTimeMillis();
-                    out.println(regex[regex_ind]);
-                    regex_ind++;
-                } else {
-                    socket.close();
-                    break;
-                }
-            }
-            */
 
             if ((fromServer = in.readLine()) != null) { // Wait for the server to answer
                 if (fromServer.equals("Connected to server")) { // Init of connection
@@ -84,7 +50,7 @@ public class ThreadClient extends Thread{
                         System.out.println("Client is ready");
                     }
 
-                    MakeRequestThread request = new MakeRequestThread(out, regex, starts, boundWait, minWait);
+                    MakeRequestThread request = new MakeRequestThread(out, regex, starts, lambda);
                     ReadDataThread read = new ReadDataThread(in, finishs, printOutput);
                     read.start();
 		            request.start();
@@ -110,10 +76,6 @@ public class ThreadClient extends Thread{
             e.printStackTrace();
         }
     }
-
-    //public long[] get_times(){
-    //    return times;
-    //}
 
 }
 
@@ -155,32 +117,29 @@ class ReadDataThread extends Thread {
 
 class MakeRequestThread extends Thread {
 
+    private static double lambda;
+    public static String[] regex;
     public PrintWriter out;
-    public String[] regex;
     public int regex_ind;
     public long[] starts;
-    public int boundWait;
-    public int minWait;
 
-    MakeRequestThread(PrintWriter out, String[] regex, long[] starts, int boundWait, int minWait) {
+    MakeRequestThread(PrintWriter out, String[] regex, long[] starts, double lambda) {
         super("MakeRequestThread");
         this.out = out;
-        this.regex = regex;
         this.regex_ind = 0;
         this.starts = starts;
-        this.boundWait = boundWait;
-        this.minWait = minWait;
+        MakeRequestThread.regex = regex;
+        MakeRequestThread.lambda = lambda;
     }
 
     public void run(){
 
-        Random ran = new Random();
-        int random_wait;
+        int NRequest_by_s;
 
         while (regex_ind < regex.length) {
-            random_wait = ran.nextInt(boundWait) + minWait;
+            NRequest_by_s = poisson_wait();
             try {
-                Thread.sleep(random_wait);
+                Thread.sleep(NRequest_by_s);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -189,6 +148,24 @@ class MakeRequestThread extends Thread {
             regex_ind++;
         }
 
+    }
+
+    public static int poisson_wait() {
+        int r = 0;
+        Random random = new Random();
+        double a = random.nextDouble();
+        double p = Math.exp(-lambda);
+
+        while (a > p) {
+            r++;
+            a = a - p;
+            p = p * lambda / r;
+        }
+        if (r == 0) {
+            return 1000;
+        } else {
+            return 1000 / r;
+        }
     }
 
 }
