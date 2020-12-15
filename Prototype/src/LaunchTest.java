@@ -4,8 +4,8 @@ public class LaunchTest {
 
     public static int nClients = 50;
     //public static String FILEPATH = "/media/sf_ArchPerf-Projet/regexSmall.txt";
-    public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\regexEasy.txt";
-    public static double lambda = 3; // Rate (mean number of request by s)
+    public static String FILEPATH = "C:\\Users\\Thib\\Documents\\UNIF\\master\\q1\\Arch and perf\\projet\\git\\regexEasy.txt";
+    public static double lambda = 1; // Rate (mean number of request by s)
     public static boolean printDetails = false;
     public static boolean printOutput = false;
 
