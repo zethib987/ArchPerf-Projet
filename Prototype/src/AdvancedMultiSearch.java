@@ -5,19 +5,21 @@ public class AdvancedMultiSearch extends Thread{
 
     private int start,end;
     private String regex;
-    static String[] request_types= {"0", "1", "2", "3", "4", "5"};
+    int indice=0;
+    String []output;
 
-    static int NUMBERSEM= 1; // nombre de semData, ici 1 car il est utilisé comme un mutex
-    static Semaphore semaphore = new Semaphore(NUMBERSEM);
 
     public AdvancedMultiSearch(){
         super("MultiSearch");
     }
-    public AdvancedMultiSearch(String regex, int start, int end){
+    public AdvancedMultiSearch(String regex, int start, int end,String [] output, int indice){
         super("MultiSearch");
         this.start=start;
         this.end=end;
         this.regex=regex;
+        this.output=output;
+        this.indice=indice;
+        output[indice]="";
     }
     public void run(){
       searchThread();
@@ -33,13 +35,9 @@ public class AdvancedMultiSearch extends Thread{
             }
         }}
         catch (Exception e){e.printStackTrace();}
-        try {
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        AdvancedServer.output+=sb.toString();
-        semaphore.release();
+
+        output[indice]=sb.toString();
+
     }
 
 

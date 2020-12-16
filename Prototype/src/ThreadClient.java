@@ -138,6 +138,7 @@ class MakeRequestThread extends Thread {
 
         while (regex_ind < regex.length) {
             NRequest_by_s = poisson_wait();
+            System.out.println(NRequest_by_s);
             try {
                 Thread.sleep(NRequest_by_s);
             } catch (InterruptedException e) {
@@ -150,7 +151,7 @@ class MakeRequestThread extends Thread {
 
     }
 
-    public static int poisson_wait() {
+    public int poisson_wait() {
         int r = 0;
         Random random = new Random();
         double a = random.nextDouble();
@@ -162,7 +163,7 @@ class MakeRequestThread extends Thread {
             p = p * lambda / r;
         }
         if (r == 0) {
-            return 1000;
+            return (int) poisson_wait();
         } else {
             return 1000 / r;
         }
