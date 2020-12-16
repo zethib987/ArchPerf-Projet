@@ -16,7 +16,7 @@ public class AdvancedServer {
     //static int nCurrentRequest=1;
     //static Semaphore semnRequest=new Semaphore(1);
 
-    static Integer indexes[];
+    static int indexes[];
     static Thread threads[];
 
     public static void main(String []args) throws InterruptedException {
@@ -95,7 +95,7 @@ public class AdvancedServer {
     }
 
     // assuming that the indexes are consecutive numbers that start from 0 to n-1 (with n= number of threads)
-    public static Integer [] startIndexes(){
+    public static int [] startIndexes(){
         ArrayList<Integer> liste = new ArrayList<>();
         int current = Integer.parseInt(data[0][0]);
         liste.add(0);
@@ -106,16 +106,18 @@ public class AdvancedServer {
             }
         }
         liste.add(data[0].length-1);
-        indexes= new Integer[liste.size()];
-        return (Integer[]) liste.toArray(indexes);
+        Integer [] indexes= new Integer[liste.size()];
+        indexes = liste.toArray(indexes);
+        int res [] = new int [indexes.length];
+        for(int i =0; i<res.length;i++){
+            res[i]=indexes[i];
+        }
+        return res;
+
     }
 
-    public static String smart4_search(String request) throws InterruptedException {
-        /*semnRequest.acquire();
-        nCurrentRequest++;
-        semnRequest.release();
-        if (nCurrentRequest>2*NThreadLimit)NTPT=1;
-        else if(nCurrentRequest<1.5*NThreadLimit) NTPT=NThreadLimit;*/
+    /*public static String smart4_search(String request,int [] indexesTab) throws InterruptedException {
+        int[] indexes = indexesTab.clone();
 
         String[] split_request = request.split(";",2);
         if (split_request.length == 2) {
@@ -149,9 +151,7 @@ public class AdvancedServer {
             for(int k=0;k< threads.length;k++){
                 threads[k].join();
             }
-          /*  semnRequest.acquire();
-            nCurrentRequest--;
-            semnRequest.release();*/
+
 
             if (output.length() == 0)
                 return "No match found";
@@ -162,7 +162,7 @@ public class AdvancedServer {
         }
 
 
-    }
+    }*/
 
 }
 

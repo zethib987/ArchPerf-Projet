@@ -25,11 +25,14 @@ public class AdvancedMultiSearch extends Thread{
 
     public void searchThread() {
         StringBuffer sb = new StringBuffer();
+        try{
+
         for (int i = start; i <= end; i++){
             if (AdvancedServer.data[1][i].matches(regex)) {
                 sb.append(AdvancedServer.data[1][i] + "@@@");
             }
-        }
+        }}
+        catch (Exception e){e.printStackTrace();}
         try {
             semaphore.acquire();
         } catch (InterruptedException e) {
