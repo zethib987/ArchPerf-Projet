@@ -2,9 +2,9 @@ import java.io.*;
 
 public class LaunchTest {
 
-    public static int nClients = 50;
-    //public static String FILEPATH = "/media/sf_ArchPerf-Projet/regexSmall.txt";
-    public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\regexEasy.txt";
+    public static int nClients = 10;
+    public static String FILEPATH = "/media/sf_ArchPerf-Projet/regexEasy.txt";
+    //public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\regexEasy.txt";
     public static double lambda = 3; // Rate (mean number of request by s)
     public static boolean printDetails = false;
     public static boolean printOutput = false;
@@ -92,11 +92,15 @@ public class LaunchTest {
         var /= clients.length;
         System.out.println("===========================");
         System.out.println("Means for all the clients :");
-        System.out.println("Mean time " + mean + " ms");
-        System.out.println("Min time " + min + " ms");
-        System.out.println("Max time " + max + " ms");
-        System.out.println("Variance " + var + " ms");
-        System.out.println("Std " + Math.sqrt(var) + " ms");
+        //System.out.println("Mean time " + mean + " ms");
+        //System.out.println("Min time " + min + " ms");
+        //System.out.println("Max time " + max + " ms");
+        //System.out.println("Variance " + var + " ms");
+        //System.out.println("Std " + Math.sqrt(var) + " ms");
+	System.out.println(mean);
+        System.out.println(min);
+        System.out.println(max);
+        System.out.println(var);
         System.out.println("===========================");
         System.out.println("Total running time " + (finish - start) + " ms");
 
