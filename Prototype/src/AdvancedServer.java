@@ -5,7 +5,7 @@ import java.util.concurrent.Semaphore;
 
 public class AdvancedServer {
 
-    static String FILEPATH = "C:\\Users\\Thib\\Documents\\unif\\2020-2021\\Q1\\Architecture and Perf\\projet\\Prototype\\src\\dbdata.txt";
+    static String FILEPATH = "/media/sf_ArchPerf-Projet/dbdata.txt";
     static int portNumber = 4444;
 
     static Semaphore sem = new Semaphore(2);

@@ -24,13 +24,11 @@ public class AdvancedMultiServerThread extends Thread{
             out.println(outputLine);
 
             while ((inputLine = in.readLine()) != null) {
-                long start= System.currentTimeMillis();
-                AdvancedServer.sem.acquire(1);
-                String s =smart4_search(inputLine, AdvancedServer.indexes,4);
-                AdvancedServer.sem.release(1);
-                System.out.println(System.currentTimeMillis()-start);
+                String s = smart4_search(inputLine, AdvancedServer.indexes,4);
+                //semaphore.acquire(); // wait for the sem to be available
+                //System.out.println("Request: " + inputLine);
                 out.println(s);
-
+                //semaphore.release(); // free the sem
             }
             socket.close();
         } catch (IOException e) {
