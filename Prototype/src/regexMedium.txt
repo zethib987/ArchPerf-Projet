@@ -1,0 +1,11 @@
+0,1;museum(.*)
+1,2;health(.*)
+2,3;team(.*)
+3,4;station(.*)
+4,5;jail(.*)
+0,1;champion(.*)
+1,2;carpet(.*)
+2,3;present(.*)
+3,4;knowledge(.*)
+4,5;copy(.*)
+

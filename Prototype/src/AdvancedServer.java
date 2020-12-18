@@ -5,19 +5,15 @@ import java.util.concurrent.Semaphore;
 
 public class AdvancedServer {
 
-    static String FILEPATH = "/media/sf_ArchPerf-Projet/dbdata.txt";
+    static String FILEPATH = "/media/sf_src/dbdata.txt";
     static int portNumber = 4444;
 
     static Semaphore sem = new Semaphore(2);
     static String data [][];
-    static int NLINES=0;
-    static int NTPT=Runtime.getRuntime().availableProcessors(); // number of threads per type
-    // static int NThreadLimit=Runtime.getRuntime().availableProcessors();
-    //static int nCurrentRequest=1;
-    //static Semaphore semnRequest=new Semaphore(1);
+    static int NLINES = 0;
+    static int NTPT = Runtime.getRuntime().availableProcessors();
 
     static int indexes[];
-    static Thread threads[];
 
     public static void main(String []args) throws InterruptedException {
 

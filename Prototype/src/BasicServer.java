@@ -2,17 +2,29 @@ import java.net.*;
 import java.io.*;
 import java.util.concurrent.Semaphore;
 
+
+/**
+ * BasicServer runs a multi threaded server (one BasicMultiServerThread by client) that read requests from
+ * the client, performs the search in the database and send back the answer to the client.
+ * This class first load the database structure and then takes care of managing the connection of
+ * the server with the clients.
+ *
+ * @author  Baptiste and Thibault
+ * @version 1.0
+ * @since   2020-12
+ */
 public class BasicServer {
 
-    public static String FILEPATH = "/media/sf_ArchPerf-Projet/dbdata.txt";
-    //public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\dbdata.txt";
-    public static int portNumber = 4444;
-    public static int NSearchSimultaneity = 1000;
-    public static boolean print = false;
+    // Settings for the user
+    public static String FILEPATH = "/media/sf_src/dbdata.txt"; // Path to the dbdata.txt
+    public static int portNumber = 4444; // Number of the port to listen
+    public static int NSearchSimultaneity = 1000; // Number of search the server can perform simultaneously
+    public static boolean print = false; // Print the requests on stdOut
 
-    public static Semaphore semData;
-    public static String [] types;
-    public static String [] sentences;
+    // Some useful variables
+    public static Semaphore semData; // Used to limit the number of simultaneous BasicMultiServerThread.raw_search()
+    public static String [] types; // data structure
+    public static String [] sentences; // data structure
 
     public static void main(String []args){
 
@@ -22,7 +34,7 @@ public class BasicServer {
         System.out.println("Loading database");
         try{ // Load database
             raw_dbLoad(FILEPATH);
-        } catch (Exception e){ // Handle exception
+        } catch (Exception e){ // Handle exceptions
             System.out.println(e);
         }
         System.out.println("Database loaded");
@@ -30,9 +42,10 @@ public class BasicServer {
 
         boolean listening = true;
         // Launch a multi server thread for each client
-        try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
-            while (listening) {
-                new BasicMultiServerThread(serverSocket.accept(), semData, types, sentences, print).start();
+        try (ServerSocket serverSocket = new ServerSocket(portNumber)) { // Create socket
+            while (listening) { // Always listen (unless there is a problem)
+                // Create a new thread for each new client that logs in to the server
+                new BasicMultiServerThread(serverSocket.accept()).start();
             }
         } catch (IOException e) { // Error on port listening
             System.err.println("Could not listen on port " + portNumber);
@@ -45,10 +58,13 @@ public class BasicServer {
 
     }
 
-    public static int howManyLines(String fileName){
+    /**
+     * Compute the number of lines in the file 'fileName'
+     */
+    public static int howManyLines (String fileName){
         BufferedReader br;
         int nLines=0;
-        try{
+        try {
             br = new BufferedReader(new FileReader(fileName));
             String line = br.readLine();
             while (line != null) {
@@ -56,20 +72,24 @@ public class BasicServer {
                 line = br.readLine();
             }
             br.close();
-        }catch(Exception e){
+        } catch(Exception e) {
             System.err.println("Error in howManyLines(): " + e);
             System.exit(-1);
         }
         return nLines;
     }
 
-    public static void raw_dbLoad(String fileName) throws IOException {
+    /**
+     * Load the data base into types and sentences structures which respectively contains the type of the sentence and
+     * the sentence associated to it (add them one by one by reading the file)
+     */
+    public static void raw_dbLoad(String fileName) {
         BufferedReader br;
         int nLines = howManyLines(fileName);
         types = new String[nLines];
         sentences = new String[nLines];
 
-        try{
+        try {
             br = new BufferedReader(new FileReader(fileName));
             String line;
             String[] line_split;
@@ -80,7 +100,7 @@ public class BasicServer {
                 sentences[i] = line_split[1];
             }
             br.close();
-        } catch(Exception e) { // Error while reading database
+        } catch (Exception e) { // Error while reading database
             System.err.println("Error while reading database: " + e);
             System.exit(-1);
         }

@@ -1,31 +1,39 @@
 import java.io.*;
 
+/**
+ * LaunchTest launches nClients ThreadClient objects that each individually emulates a client that performs a
+ * mean of lambda requests/s. The requests are the one specified in the FILEPATH file (which should contain a
+ * valid request by line). Once all the ThreadClient have joined, this function computes and output some
+ * statistics about the time of the requests for each client.
+ *
+ * @author  Baptiste and Thibault
+ * @version 1.0
+ * @since   2020-12
+ */
 public class LaunchTest {
 
-    public static int nClients = 10;
-    public static String FILEPATH = "/media/sf_ArchPerf-Projet/regexHard.txt";
-    //public static String FILEPATH = "C:\\Users\\bapti\\OneDrive\\Documents\\Education\\EPL\\Master\\Q9\\LINGI2241 - Architecture and performance of computer systems\\ArchPerf-Projet\\regexEasy.txt";
-    public static double lambda = 5; // Rate (mean number of request by s)
-    public static boolean printDetails = false;
-    public static boolean printOutput = false;
+    // Settings for the user
+    public static int nClients = 25; // Number of clients to launch
+    public static String FILEPATH = "/media/sf_src/regexEasy.txt"; // Path to the file containing the regex requests
+    public static double lambda = 0.20; // Request rate: mean number of request by s for one client
+    public static boolean printDetails = false; // Print all the computed statistics on stdOut
+    public static boolean printOutput = false; // Print the outputs of the requests on stdOut
 
-    public static ThreadClient[] clients;
-    public static String[] regex;
-    public static long[][] times;
-    public static long[] means;
-    public static long[] totals;
-    public static long[] mins;
-    public static long[] maxs;
-    public static long[] vars;
+    // Some useful variables
+    public static ThreadClient[] clients; // Table containing all the clients thread
+    public static String[] regex; // All the requests from FILEPATH
+    public static long[][] times; // used for the statistics
+    public static long[] means; // used for the statistics
+    public static long[] totals; // used for the statistics
+    public static long[] mins; // used for the statistics
+    public static long[] maxs; // used for the statistics
+    public static long[] vars; // used for the statistics
 
     public static void main(String[] args) throws InterruptedException {
 
-        try{
-            loadRegex(FILEPATH);
-        } catch (Exception e){
-            System.err.println(e);
-        }
-
+        // Load the requests into regex
+        loadRegex(FILEPATH);
+        // Initialization of the variables
         clients = new ThreadClient[nClients];
         times = new long[nClients][regex.length];
         means = new long[nClients];
@@ -34,23 +42,24 @@ public class LaunchTest {
         maxs = new long[nClients];
         vars = new long[nClients];
 
-        for (int i = 0; i < nClients; i++) {
-            clients[i] = new ThreadClient(regex, times[i], lambda, printOutput);
+        for (int i = 0; i < nClients; i++) { // Creating the ThreadClient objects
+            clients[i] = new ThreadClient(times[i]);
         }
-
+        // Launching the ThreadClient objects
         System.out.println("Launching " + nClients + " clients");
         for (int i = 0; i < nClients; i++) {
             clients[i].start();
         }
-
-        long start = System.currentTimeMillis();
+        // Waiting the ThreadClient objects
+        long start = System.currentTimeMillis(); // For stats purpose
         for (int i = 0; i < clients.length; i++) {
             System.out.println("Waiting client " + i);
             clients[i].join();
         }
 
-        long finish = System.currentTimeMillis();
+        long finish = System.currentTimeMillis(); // For stats purpose
 
+        // Compute the mean, min, max, variance and std requests time for each client
         for (int i = 0; i < clients.length; i++) {
             long total = 0;
             mins[i] = Long.MAX_VALUE;
@@ -69,7 +78,7 @@ public class LaunchTest {
                 vars[i] += Math.pow((times[i][j] - means[i]), 2);
             }
             vars[i] /= (times[i].length - 1);
-            if (printDetails) {
+            if (printDetails) { // Print all the details by client
                 System.out.println("Details of client " + i + ": ");
                 System.out.println("Mean time " + means[i] + " ms");
                 System.out.println("Min time " + mins[i] + " ms");
@@ -79,6 +88,7 @@ public class LaunchTest {
             }
         }
 
+        // Compute the means of the mean, min, max, variance and std requests time for all the client
         long mean = 0, min = 0, max = 0, var = 0;
         for (int i = 0; i < clients.length; i++) {
             mean += means[i];
@@ -90,26 +100,27 @@ public class LaunchTest {
         min /= clients.length;
         max /= clients.length;
         var /= clients.length;
+
+        // Print the statistics results
         System.out.println("===========================");
         System.out.println("Means for all the clients :");
-        //System.out.println("Mean time " + mean + " ms");
-        //System.out.println("Min time " + min + " ms");
-        //System.out.println("Max time " + max + " ms");
-        //System.out.println("Variance " + var + " ms");
-        //System.out.println("Std " + Math.sqrt(var) + " ms");
-	System.out.println(mean);
-        System.out.println(min);
-        System.out.println(max);
-        System.out.println(var);
+        System.out.println("Mean time " + mean + " ms");
+        System.out.println("Min time " + min + " ms");
+        System.out.println("Max time " + max + " ms");
+        System.out.println("Variance " + var + " ms");
+        System.out.println("Std " + Math.sqrt(var) + " ms");
         System.out.println("===========================");
         System.out.println("Total running time " + (finish - start) + " ms");
 
     }
 
+    /**
+     * Compute the number of lines in the file 'fileName'
+     */
     public static int howManyLines(String fileName){
         BufferedReader br;
-        int nLines=0;
-        try{
+        int nLines = 0;
+        try {
             br = new BufferedReader(new FileReader(fileName));
             String line = br.readLine();
             while (line != null) {
@@ -117,18 +128,22 @@ public class LaunchTest {
                 line = br.readLine();
             }
             br.close();
-        }catch(Exception e){
+        } catch(Exception e) {
             System.err.println("Error in howManyLines(): " + e);
             System.exit(-1);
         }
         return nLines;
     }
 
-    public static void loadRegex(String fileName) throws IOException {
+    /**
+     * Load all the requests in the file 'fileName' into the regex structure by reading each line of the file
+     * and adding it to the structure
+     */
+    public static void loadRegex(String fileName) {
         BufferedReader br;
         int nLines = howManyLines(fileName);
         regex = new String[nLines];
-        try{
+        try {
             br = new BufferedReader(new FileReader(fileName));
             for (int i = 0; i < nLines; i++) {
                 regex[i] = br.readLine();

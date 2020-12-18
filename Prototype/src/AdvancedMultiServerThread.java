@@ -1,12 +1,8 @@
 import java.net.*;
 import java.io.*;
-import java.util.Timer;
-import java.util.concurrent.Semaphore;
 
 public class AdvancedMultiServerThread extends Thread{
     private Socket socket = null;
-
-
 
     public AdvancedMultiServerThread(Socket socket) {
         super("AdvancedMultiServerThread");
@@ -24,11 +20,8 @@ public class AdvancedMultiServerThread extends Thread{
             out.println(outputLine);
 
             while ((inputLine = in.readLine()) != null) {
-                String s = smart4_search(inputLine, AdvancedServer.indexes,4);
-                //semaphore.acquire(); // wait for the sem to be available
-                //System.out.println("Request: " + inputLine);
+                String s = smart4_search(inputLine, AdvancedServer.indexes, AdvancedServer.NTPT);
                 out.println(s);
-                //semaphore.release(); // free the sem
             }
             socket.close();
         } catch (IOException e) {
