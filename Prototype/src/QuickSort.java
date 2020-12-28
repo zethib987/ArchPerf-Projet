@@ -1,3 +1,11 @@
+/**
+ * Peform a special Quicksort, adapted  to our 2 columns array. Useful to improve our search algorithm
+ * Heavly inspired of the quicksort from "Algorithm, fourth edition" by Robert Sedgewick and Kevin Wayne
+ *
+ * @author  Baptiste and Thibault
+ * @version 1.0
+ * @since   2020-12
+ */
 public class QuickSort {
 
     static int n=20;
@@ -5,15 +13,12 @@ public class QuickSort {
     public static void quickSort(){
         sort(0, AdvancedServer.data[0].length-1);
 
-
     }
     public static void sort(int lo, int hi) {
         if (hi <= lo) return;
         int j = partition(lo, hi);
-        //System.out.println(j);
 
         if (n > 0) {
-            //System.out.println("N: "+n);
             new MultiSort(lo, j - 1).start();
             n -= 1;
         } else {

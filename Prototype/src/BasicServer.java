@@ -63,15 +63,15 @@ public class BasicServer {
      */
     public static int howManyLines (String fileName){
         BufferedReader br;
-        int nLines=0;
+        int nLines=0; // store the number of lines in the file
         try {
-            br = new BufferedReader(new FileReader(fileName));
-            String line = br.readLine();
-            while (line != null) {
+            br = new BufferedReader(new FileReader(fileName)); // launch a buffer reader
+            String line = br.readLine(); // read a line form the file
+            while (line != null) { // loops until there's no more line to read
                 nLines++;
                 line = br.readLine();
             }
-            br.close();
+            br.close(); // close the buffer reader
         } catch(Exception e) {
             System.err.println("Error in howManyLines(): " + e);
             System.exit(-1);
